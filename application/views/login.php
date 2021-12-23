@@ -16,7 +16,7 @@
                     <h2 class="text-center">Login Form</h2>
                     <p class="text-center">Login with your email and password.</p>
                     <div class="form-group">
-                        <input class="form-control" type="email" name="email" placeholder="Email Address" required>
+                        <input class="form-control" type="email" name="email" placeholder="Email" required>
                     </div>
                     <div class="form-group">
                         <input class="form-control" type="password" name="password" placeholder="Password" required>
