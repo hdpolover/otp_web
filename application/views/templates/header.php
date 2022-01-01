@@ -15,14 +15,51 @@
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
     <link rel="stylesheet" type="text/css" href="<?= base_url('assets/'); ?>js/select.dataTables.min.css">
+
+    <link rel="stylesheet" href="<?= base_url();?>assets/plugin/sweetalert2/sweetalert2.min.css">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="<?= base_url('assets/'); ?>images/favicon.png" />
+
+
+    <!-- plugins:js -->
+    <script src="<?= base_url('assets/'); ?>vendors/js/vendor.bundle.base.js"></script>
+    <script type="text/javascript" src="<?= base_url();?>assets/plugin/sweetalert2/sweetalert2.min.js"></script>
 </head>
 
 <body>
+    <!-- ALERT -->
+    <?php if ($this->session->flashdata('error')) { ?>
+    <script>
+    Swal.fire({
+        text: '<?php echo $this->session->flashdata('error');?>',
+        icon: 'info',
+    })
+
+    </script>
+    <?php }?>
+
+    <?php if ($this->session->flashdata('warning')) { ?>
+    <script>
+    Swal.fire({
+        text: '<?php echo $this->session->flashdata('warning');?>',
+        icon: 'warning',
+    })
+
+    </script>
+    <?php }?>
+
+    <?php if ($this->session->flashdata('success')) { ?>
+    <script>
+    Swal.fire({
+        text: '<?php echo $this->session->flashdata('success');?>',
+        icon: 'success',
+    })
+
+    </script>
+    <?php }?>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
