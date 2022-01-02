@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Skydash Admin</title>
+    <title>Webotpku</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/feather/feather.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
@@ -66,8 +66,8 @@
                             <div class="brand-logo">
                                 <img src="<?= base_url('assets/'); ?>images/logo.svg" alt="logo">
                             </div>
-                            <h4>New here?</h4>
-                            <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
+                            <h4>Belum punya akun?</h4>
+                            <h6 class="font-weight-light">Mendaftarkan akun sangatlah mudah. Silakan isi formulir berikut.</h6>
                             <form class="pt-3" action="<?= site_url('register/proses_daftar');?>" method="post">
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-lg" name="nama" id="exampleInputUsername" placeholder="Nama lengkap">
@@ -85,10 +85,10 @@
                                     <input type="password" class="form-control form-control-lg" name="password_conf" id="exampleInputPasswordConf" placeholder="Konfirmasi Password">
                                 </div>
                                 <div class="mt-3">
-                                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id="send-button">SIGN UP</button>
+                                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id="send-button">DAFTAR</button>
                                 </div>
                                 <div class="text-center mt-4 font-weight-light">
-                                    Already have an account? <a href="<?= site_url('login');?>" class="text-primary">Login</a>
+                                    Sudah punya akun? <a href="<?= site_url('login');?>" class="text-primary">Masuk sekarang</a>
                                 </div>
                             </form>
                         </div>

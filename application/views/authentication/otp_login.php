@@ -5,7 +5,7 @@
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Skydash Admin</title>
+	<title>Webotpku</title>
 	<!-- plugins:css -->
 	<link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/feather/feather.css">
 	<link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
@@ -71,14 +71,14 @@
 							<form class="pt-3" action="<?= site_url('login/proses_verifikasiOtp');?>" method="post">
 								<div class="form-group mb-0">
 									<input type="number" class="form-control form-control-lg" name="kode_otp" id="exampleInputEmail1"
-										placeholder="OTP code">
+										placeholder="Kode OTP">
 								</div>
-								<center><small class="text-warning">Hai <b><?= $this->session->userdata('nama');?></b>, harap masukkan kode OTP yang telah kamu terima.</small></center>
+								<center>Harap masukkan kode OTP yang telah Anda terima.</center>
 								<div class="mt-3">
-										<button type="submit" class="btn btn-primary btn-block" id="send-button">Verifikasi OTP</button>
+										<button type="submit" class="btn btn-primary btn-block" id="send-button">VERIFIKASI OTP</button>
 								</div>
 								<div class="text-center mt-4 font-weight-light">
-									Belum menerima? <a href="<?= site_url('otp');?>" class="text-primary">kirim ulang</a>
+									Belum menerima kode OTP? <a href="<?= site_url('otp');?>" class="text-primary">Kirim ulang</a>
 								</div>
 							</form>
 						</div>

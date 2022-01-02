@@ -5,7 +5,7 @@
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Skydash Admin</title>
+	<title>Webotpku</title>
 	<!-- plugins:css -->
 	<link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/feather/feather.css">
 	<link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
@@ -66,11 +66,11 @@
 								<img src="<?= base_url('assets/'); ?>images/logo.svg" alt="logo">
 							</div>
 							<center>
-								<h4>Oppss... Blocked IP</h4>
+								<h4>Oopss... IP diblock!</h4>
 							</center>
-              <center><small class="text-warning">Hai <b><?= $this->session->userdata('nama');?></b>, mohon maaf IP anda <?= $this->input->ip_address();?>. Telah di block (oleh anda). Anda dapat menghapus block di halaman utama anda, setelah login</small></center>
+              <center><small class="text-warning">Mohon maaf. IP anda <?= $this->input->ip_address();?>. Telah di block (oleh anda). Anda dapat menghapus block di halaman utama anda, setelah login</small></center>
               <div class="text-center mt-4 font-weight-light">
-                <a href="<?= site_url('logout');?>" class="text-primary">logout</a>
+                <a href="<?= site_url('logout');?>" class="text-primary">Keluar</a>
               </div>
 						</div>
 					</div>

@@ -65,17 +65,17 @@
               <div class="brand-logo">
                 <img src="<?= base_url('assets/'); ?>images/logo.svg" alt="logo">
               </div>
-              <h4>Hello! let's get started</h4>
-              <h6 class="font-weight-light">Enter your activation code, check your email inbox or spam folder.</h6>
+              <h4>Selamat datang!</h4>
+              <h6 class="font-weight-light">Masukan kode aktivasi Anda. Cek kotak masuk atau spam folder email Anda.</h6>
               <form class="pt-3" action="<?= site_url('login/aktivasi_akun');?>" method="post">
                 <div class="form-group">
-                  <input type="number" class="form-control form-control-lg" name="kode_aktivasi" id="exampleInputEmail1" placeholder="Activation code">
+                  <input type="number" class="form-control form-control-lg" name="kode_aktivasi" id="exampleInputEmail1" placeholder="Kode Aktivasi">
                 </div>
                 <div class="mt-3">
-                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id="send-button">Aktivasi akun</button>
+                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id="send-button">AKTIVASI AKUN</button>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
-                  Already have an account? <a href="<?= site_url('login');?>" class="text-primary">Login</a>
+                  Sudah punya akun? <a href="<?= site_url('login');?>" class="text-primary">Masuk sekarang</a>
                 </div>
               </form>
             </div>

@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Skydash Admin</title>
+    <title>Webotpku</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/feather/feather.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
@@ -74,7 +74,7 @@
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                            <img src="<?= base_url('assets/'); ?>images/faces/face28.jpg" alt="profile" />
+                            <img src="<?= base_url('assets/'); ?>images/default.png" alt="profile" />
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                             <a href="<?= site_url('pengaturan');?>" class="dropdown-item">

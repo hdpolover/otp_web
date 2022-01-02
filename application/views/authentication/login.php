@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Skydash Admin</title>
+  <title>Webotpku</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/feather/feather.css">
   <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
@@ -63,10 +63,10 @@
           <div class="col-lg-4 mx-auto">
             <div class="auth-form-light text-left py-5 px-4 px-sm-5">
               <div class="brand-logo">
-                <img src="<?= base_url('assets/'); ?>images/logo.svg" alt="logo">
+                <img src="<?= base_url('assets/'); ?>images/favicon.png" alt="logo">
               </div>
-              <h4>Hello! let's get started</h4>
-              <h6 class="font-weight-light">Sign in to continue.</h6>
+              <h4>Halo! Selamat datang.</h4>
+              <h6 class="font-weight-light">Silakan masuk untuk melanjutkan.</h6>
               <form class="pt-3" action="<?= site_url('login/proses_login');?>" method="post">
                 <div class="form-group">
                   <input type="email" class="form-control form-control-lg" name="email" id="exampleInputEmail1" placeholder="Email">
@@ -75,13 +75,13 @@
                   <input type="password" class="form-control form-control-lg" name="password" id="exampleInputPassword1" placeholder="Password">
                 </div>
                 <div class="mt-3">
-                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id="send-button">SIGN IN</button>
+                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id="send-button">MASUK</button>
                 </div>
                 <div class="my-2 d-flex justify-content-between align-items-center">
-                  <a href="<?= site_url('lupa-password');?>" class="auth-link text-black">Forgot password?</a>
+                  <a href="<?= site_url('lupa-password');?>" class="auth-link text-black">Lupa password?</a>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
-                  Don't have an account? <a href="<?= site_url('register');?>" class="text-primary">Create</a>
+                  Belum punya akun? <a href="<?= site_url('register');?>" class="text-primary">Daftar sekarang</a>
                 </div>
               </form>
             </div>

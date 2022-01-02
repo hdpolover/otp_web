@@ -15,7 +15,7 @@ class Register extends CI_Controller
   {
     if($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in'))
     {
-      $this->session->set_flashdata('warning', 'Anda telah masuk kedalam akun anda !');
+      $this->session->set_flashdata('warning', 'Berhasil masuk ke akun.');
       redirect(site_url('home'));
     }else
     {
@@ -61,21 +61,22 @@ class Register extends CI_Controller
               'id_user'   => $user->id_user,
               'nama'      => $user->nama,
               'email'     => $user->email,
+              'no_telp'   => $user->no_telp,
               'logged_in' => true,
           );
           
           $this->session->set_userdata($session_data);
           
-          $this->session->set_flashdata('success', "Berhasil mendaftaran akun anda, harap melanjutkan proses aktivasi !");
+          $this->session->set_flashdata('success', "Berhasil mendaftaran akun Anda. Harap melanjutkan proses aktivasi!");
           redirect(site_url('aktivasi-akun'));
         } else {
-          $this->session->set_flashdata('error', "Terjadi kesalahan saat mendaftarkan akun anda, harap coba lagi !");
+          $this->session->set_flashdata('error', "Terjadi kesalahan saat mendaftarkan akun Anda. Harap coba lagi!");
           redirect(site_url('register'));
         }
         
         
       } else {
-        $this->session->set_flashdata('warning', "Password yang anda masukkan tidak sama !");
+        $this->session->set_flashdata('warning', "Password yang Anda masukkan tidak sama!");
         redirect(site_url('register'));
       }
       
