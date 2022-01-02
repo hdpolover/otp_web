@@ -66,22 +66,16 @@
                 <img src="<?= base_url('assets/'); ?>images/logo.svg" alt="logo">
               </div>
               <h4>Hello! let's get started</h4>
-              <h6 class="font-weight-light">Sign in to continue.</h6>
-              <form class="pt-3" action="<?= site_url('login/proses_login');?>" method="post">
+              <h6 class="font-weight-light">Enter your activation code, check your email inbox or spam folder.</h6>
+              <form class="pt-3" action="<?= site_url('login/aktivasi_akun');?>" method="post">
                 <div class="form-group">
-                  <input type="email" class="form-control form-control-lg" name="email" id="exampleInputEmail1" placeholder="Email">
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" name="password" id="exampleInputPassword1" placeholder="Password">
+                  <input type="number" class="form-control form-control-lg" name="kode_aktivasi" id="exampleInputEmail1" placeholder="Activation code">
                 </div>
                 <div class="mt-3">
-                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN IN</button>
-                </div>
-                <div class="my-2 d-flex justify-content-between align-items-center">
-                  <a href="<?= site_url('lupa-password');?>" class="auth-link text-black">Forgot password?</a>
+                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Aktivasi akun</button>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
-                  Don't have an account? <a href="<?= site_url('register');?>" class="text-primary">Create</a>
+                  Already have an account? <a href="<?= site_url('login');?>" class="text-primary">Login</a>
                 </div>
               </form>
             </div>
