@@ -71,7 +71,7 @@
               <center><small class="text-warning">Hai <b><?= $this->session->userdata('nama');?></b>, pilih salah satu
                   metode dibawah ini untuk menerima kode OTP sebelum login.</small></center>
               <div class="mt-3">
-                <div class="btn-group btn-block" role="group" aria-label="Basic example">
+                <div class="btn-group btn-block" role="group" aria-label="Basic example" id="send-button">
                   <a href="<?= site_url('send-otp/email');?>" class="btn btn-primary ">Kirim OTP Email</a>
                   <a href="<?= site_url('send-otp/sms');?>" class="btn btn-primary ">Kirim OTP SMS</a>
                 </div>
@@ -88,6 +88,17 @@
 		<!-- page-body-wrapper ends -->
 	</div>
 	<!-- container-scroller -->
+
+<script>
+  $('form').submit(function(event) {
+    $('#send-button').prop("disabled", true);
+    // add spinner to button
+    $('#send-button').html(
+      `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+      );
+    return;
+  });
+</script>
 	<!-- endinject -->
 	<!-- Plugin js for this page -->
 	<!-- End plugin js for this page -->

@@ -35,4 +35,13 @@ class Home extends CI_Controller
         $this->load->view('content', $data);
         $this->load->view('templates/footer');
     }
+
+    public function pengaturan()
+    {
+
+        $this->load->view('templates/header');
+        $this->load->view('templates/sidebar');
+        $this->load->view('pengaturan');
+        $this->load->view('templates/footer');
+    }
 }

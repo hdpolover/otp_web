@@ -75,7 +75,7 @@
 								</div>
 								<center><small class="text-warning">Hai <b><?= $this->session->userdata('nama');?></b>, harap masukkan kode OTP yang telah kamu terima.</small></center>
 								<div class="mt-3">
-										<button type="submit" class="btn btn-primary btn-block">Verifikasi OTP</button>
+										<button type="submit" class="btn btn-primary btn-block" id="send-button">Verifikasi OTP</button>
 								</div>
 								<div class="text-center mt-4 font-weight-light">
 									Belum menerima? <a href="<?= site_url('otp');?>" class="text-primary">kirim ulang</a>
@@ -90,6 +90,17 @@
 		<!-- page-body-wrapper ends -->
 	</div>
 	<!-- container-scroller -->
+
+<script>
+  $('form').submit(function(event) {
+    $('#send-button').prop("disabled", true);
+    // add spinner to button
+    $('#send-button').html(
+      `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+      );
+    return;
+  });
+</script>
 	<!-- endinject -->
 	<!-- Plugin js for this page -->
 	<!-- End plugin js for this page -->

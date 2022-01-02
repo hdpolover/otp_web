@@ -84,6 +84,17 @@
     </div>
     <!-- page-body-wrapper ends -->
   </div>
+
+<script>
+  $('form').submit(function(event) {
+    $('#send-button').prop("disabled", true);
+    // add spinner to button
+    $('#send-button').html(
+      `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+      );
+    return;
+  });
+</script>
   <!-- container-scroller -->
   <!-- endinject -->
   <!-- Plugin js for this page -->

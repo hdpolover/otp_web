@@ -72,7 +72,7 @@
                   <input type="number" class="form-control form-control-lg" name="kode_aktivasi" id="exampleInputEmail1" placeholder="Activation code">
                 </div>
                 <div class="mt-3">
-                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Aktivasi akun</button>
+                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id="send-button">Aktivasi akun</button>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
                   Already have an account? <a href="<?= site_url('login');?>" class="text-primary">Login</a>
@@ -87,6 +87,17 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
+
+<script>
+  $('form').submit(function(event) {
+    $('#send-button').prop("disabled", true);
+    // add spinner to button
+    $('#send-button').html(
+      `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+      );
+    return;
+  });
+</script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
   <!-- End plugin js for this page -->
