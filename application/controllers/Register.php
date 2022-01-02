@@ -19,7 +19,7 @@ class Register extends CI_Controller
       redirect(site_url('home'));
     }else
     {
-      $this->load->view('register');
+      $this->load->view('authentication/register');
     }
   }
   
@@ -43,7 +43,7 @@ class Register extends CI_Controller
           'nama'      => $nama,
           'no_telp'   => $no_telp,
           'email'     => $email,
-          'aktivasi'  => $this->M_login->create_aktivasi(),
+          'aktivasi'  => $this->M_login->create_kode(),
           'password'  => password_hash($password, PASSWORD_DEFAULT),
         );
         
@@ -87,7 +87,7 @@ class Register extends CI_Controller
   }
 
   function test(){
-    echo $this->M_login->create_aktivasi();
+    echo $this->M_login->create_kode();
   }
     
 	// MAILER SENDER

@@ -6,6 +6,11 @@ $route['recovery-password/(:any)']  = 'login/ubah_password/$1';
 
 $route['aktivasi-akun']             = 'login/aktivasi_email';
 
+$route['otp']                       = 'login/otp_send';
+$route['send-otp/email']            = 'login/send_otp_email';
+$route['send-otp/sms']              = 'login/send_otp_sms';
+$route['verifikasi-otp']            = 'login/verifikasi_otp';
+
 $route['logout']                    = 'login/logout';
 
 $route['default_controller']    = 'login';
