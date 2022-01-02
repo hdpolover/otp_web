@@ -31,12 +31,28 @@ class Login extends CI_Controller
         }
     }
     
+    public function blocked(){
+        $this->load->view('authentication/blocked');
+    }
+    
     public function password_hash(){
         echo password_hash("12341234", PASSWORD_DEFAULT);
     }
-
-    public function test_ip(){
-        echo $_SERVER['REMOTE_ADDR'];
+    
+    public function test_agent(){
+        if ($this->agent->is_browser()){
+            $agent = $this->agent->browser().' '.$this->agent->version();            
+        }elseif ($this->agent->is_mobile()){            
+            $agent = $this->agent->mobile();            
+        }else{            
+            $agent = 'Data user gagal di dapatkan';            
+        }
+        echo "Di akses dari :<br/>";
+        
+        echo "Browser = ". $agent . "<br/>";
+        
+        echo "Sistem Operasi = " . $this->agent->platform() ."<br/>";
+        echo "<br>IP: ".$this->input->ip_address();
     }
     
     public function proses_login()
@@ -69,15 +85,34 @@ class Login extends CI_Controller
                     redirect(site_url('aktivasi-akun'));
                 } else {
                     // arahkan ke halaman admin
-                    if ($this->session->userdata('redirect')) {
-                        $this->session->set_flashdata('success', 'Hai, anda telah masuk. Silahkan melanjutkan aktivitas anda !!');
-                        redirect($this->session->userdata('redirect'));
-                    } else {
-                        // $this->session->set_flashdata('success', "Hai, Selamat datang !");
-                        // redirect(site_url('home'));
+                    
+                    
+                    
+                    // cek IP
+                    
+                    // get user data IP by ID
+                    $userIP = $this->M_login->get_userIP($this->session->userdata('id_user'), $this->input->ip_address());
+                    
+                    if ($userIP == TRUE) {
                         
-                        // OTP FIRST
-                        $this->session->set_flashdata('success', "harap verifikasi OTP terlebih dahulu !");
+                        // cek apakah IP tidak di blokir
+                        if ($this->M_login->get_userIPBLOKIR($this->session->userdata('id_user'), $this->input->ip_address()) == true) {
+                            // iya blokir
+                            $this->session->set_flashdata('warning', "anda login menggunakan IP yang telah diblock !");
+                            redirect(site_url('ip-blocked'));
+                        } else {
+                            // bypass OTP
+                            if ($this->session->userdata('redirect')) {
+                                $this->session->set_flashdata('success', 'Hai, anda telah masuk. Silahkan melanjutkan aktivitas anda !!');
+                                redirect($this->session->userdata('redirect'));
+                            } else {
+                                $this->session->set_flashdata('success', "Hai, Selamat datang !");
+                                redirect(site_url('home'));
+                            }
+                        }
+                    } else {
+                        // OTP REQUIRE
+                        $this->session->set_flashdata('warning', "Anda login dari IP baru, harap melakukan proses OTP !");
                         redirect(site_url('otp'));
                     }
                 }
@@ -133,6 +168,10 @@ class Login extends CI_Controller
 			$kode_otp 	    = htmlspecialchars($this->input->post('kode_otp'), TRUE);
             
             if ($this->M_login->cekOtp_kode(str_replace('-', '', $kode_otp), $this->session->userdata('id_user')) == TRUE) {
+                
+                // simpan IP
+                $this->M_login->save_loginIP();
+                
                 $this->session->set_flashdata('success', "Berhasil memverifikasi, selamat datang !");
                 redirect(site_url('home'));
             }else {
@@ -387,7 +426,8 @@ class Login extends CI_Controller
 						redirect(site_url('aktivasi-akun'));
 					}
 				}else {
-					redirect('peserta');
+                    $this->session->set_flashdata('error', 'Anda telah mengaktivasi akun anda !!');
+                    redirect(site_url('home'));
 				}
 			}
 		}else {

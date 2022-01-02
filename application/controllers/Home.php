@@ -21,14 +21,18 @@ class Home extends CI_Controller
 			$this->session->set_userdata('redirect', $uri);
 			$this->session->set_flashdata('error', "Harap login ke akun anda, untuk melanjutkan");
 			redirect('login');
-		}
+        }
+        
+        $this->load->model('M_home');
 	}
 
     public function index()
     {
+        $data['history_ip'] = $this->M_home->get_historyIP($this->session->userdata('id_user'));
+
         $this->load->view('templates/header');
         $this->load->view('templates/sidebar');
-        $this->load->view('content');
+        $this->load->view('content', $data);
         $this->load->view('templates/footer');
     }
 }
