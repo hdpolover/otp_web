@@ -16,7 +16,7 @@ class Register extends CI_Controller
     if($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in'))
     {
       $this->session->set_flashdata('warning', 'Anda telah masuk kedalam akun anda !');
-      redirect(base_url());
+      redirect(site_url('home'));
     }else
     {
       $this->load->view('register');
@@ -40,10 +40,11 @@ class Register extends CI_Controller
         
         // ubah inputan view menjadi array
         $data_user = array(
-          'NAMA'      => $nama,
-          'NO_TELP'   => $no_telp,
-          'EMAIL'     => $email,
-          'PASSWORD'  => password_hash($password, PASSWORD_DEFAULT),
+          'nama'      => $nama,
+          'no_telp'   => $no_telp,
+          'email'     => $email,
+          'aktivasi'  => $this->M_login->create_aktivasi(),
+          'password'  => password_hash($password, PASSWORD_DEFAULT),
         );
         
         // masukkan ke database
@@ -52,9 +53,21 @@ class Register extends CI_Controller
           $message    = "Hai, {$nama} selamat bergabung.</br></br></br></br>";
           
           $this->send_email($email, $subject, $message);
+
+          $user     = $this->M_login->get_user($email);
+                
+          // simpan data user yang login kedalam session 
+          $session_data = array(
+              'id_user'   => $user->id_user,
+              'nama'      => $user->nama,
+              'email'     => $user->email,
+              'logged_in' => true,
+          );
           
-          $this->session->set_flashdata('success', "Berhasil mendaftaran akun anda, harap login untuk melanjutkan !");
-          redirect(site_url('login'));
+          $this->session->set_userdata($session_data);
+          
+          $this->session->set_flashdata('success', "Berhasil mendaftaran akun anda, harap melanjutkan proses aktivasi !");
+          redirect(site_url('aktivasi-akun'));
         } else {
           $this->session->set_flashdata('error', "Terjadi kesalahan saat mendaftarkan akun anda, harap coba lagi !");
           redirect(site_url('register'));
@@ -71,6 +84,10 @@ class Register extends CI_Controller
       redirect(site_url('register'));
     }
     
+  }
+
+  function test(){
+    echo $this->M_login->create_aktivasi();
   }
     
 	// MAILER SENDER

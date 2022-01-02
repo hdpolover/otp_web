@@ -16,7 +16,7 @@ class Login extends CI_Controller
         if($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in'))
         {
             $this->session->set_flashdata('warning', 'Anda telah masuk kedalam akun anda !');
-            redirect(base_url());
+            redirect(site_url('home'));
         }else
         {
             $this->load->view('login');
@@ -60,7 +60,7 @@ class Login extends CI_Controller
             $user     = $this->M_login->get_user($email);
             
             // cek apakah password yang dimasukkan sama dengan database
-            if (password_verify($password, $user->PASSWORD)) {
+            if (password_verify($password, $user->password)) {
                 
                 // simpan data user yang login kedalam session 
                 $session_data = array(
@@ -72,13 +72,19 @@ class Login extends CI_Controller
                 
                 $this->session->set_userdata($session_data);
                 
-                // arahkan ke halaman admin
-                if ($this->session->userdata('redirect')) {
-                    $this->session->set_flashdata('success', 'Hai, anda telah masuk. Silahkan melanjutkan aktivitas anda !!');
-                    redirect($this->session->userdata('redirect'));
+                // cek aktivasi
+                if ($user->status == 0) {
+                    $this->session->set_flashdata('warning', "Harap melakukan aktivasi akun !");
+                    redirect(site_url('aktivasi-akun'));
                 } else {
-                    $this->session->set_flashdata('success', "Hai, admin. Selamat datang !");
-                    redirect(site_url('home'));
+                    // arahkan ke halaman admin
+                    if ($this->session->userdata('redirect')) {
+                        $this->session->set_flashdata('success', 'Hai, anda telah masuk. Silahkan melanjutkan aktivitas anda !!');
+                        redirect($this->session->userdata('redirect'));
+                    } else {
+                        $this->session->set_flashdata('success', "Hai, admin. Selamat datang !");
+                        redirect(site_url('home'));
+                    }
                 }
                 
             } else {
@@ -160,6 +166,158 @@ class Login extends CI_Controller
         $this->session->set_flashdata('success', "Anda berhasil keluar !");
         redirect(base_url());
     }
+
+	// AKTIVASI AKUN
+	public function aktivasi_email(){
+		if ($this->session->userdata('logged_in') == TRUE) {
+			$email 		= htmlspecialchars($this->session->userdata('email'), TRUE);
+
+			if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE)) == FALSE) {
+				$this->session->set_flashdata('error', 'Terjadi kesalahan saat mengambil data anda !!');
+				redirect(site_url('login'));
+
+			}else {
+				$aktivasi = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE));
+
+				if ($aktivasi->status == 0) {
+					$subject	= "KODE AKTIVASI AKUN";
+					$message 	= "Kode aktivasi anda: <br><br><center><b style'font-size: 20px;'>{$this->encryption->decrypt($aktivasi->aktivasi)}</b></center><br><br>";
+
+					if ($this->send_email($email, $subject, $message) == TRUE) {
+
+						$data['mail']			= $email;
+						$data['kode_aktivasi']	= $this->encryption->decrypt($aktivasi->aktivasi);
+                        $this->load->view('aktivasi', $data);
+
+					}else {
+						$this->session->set_flashdata('error', 'Terjadi kesalahan saat mengirimkan pesan ke email anda !!');
+						redirect(site_url('aktivasi-akun'));
+					}
+				}else {
+					redirect('peserta');
+				}
+			}
+		}else {
+			if (!empty($_SERVER['QUERY_STRING'])) {
+				$uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
+			} else {
+				$uri = uri_string();
+			}
+			$this->session->unset_userdata('redirect');
+			$this->session->set_userdata('redirect', $uri);
+			$this->session->set_flashdata('error', "Harap login ke akun anda, untuk melanjutkan");
+			redirect('login');
+		}
+	}
+
+	public function waiting(){
+		if ($this->session->userdata('logged_in') == TRUE || $this->session->userdata('logged_in')) {
+
+			$email 		= htmlspecialchars($this->session->userdata('email'), TRUE);
+
+			if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE)) == FALSE) {
+
+				$this->session->set_flashdata('error', 'Terjadi kesalahan saat mengambil data anda !!');
+				redirect(site_url('login'));
+
+			}else {
+				$aktivasi = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE));
+
+				if ($aktivasi->STATUS == 0) {
+					$subject	= "KODE AKTIVASI AKUN";
+					$message 	= "Kode aktivasi anda <b>{$this->encryption->decrypt($aktivasi->aktivasi)}</b></br>";
+
+					if ($this->send_email($email, $subject, $message) == TRUE) {
+
+						$data['mail']		= $email;
+                        $this->load->view('aktivasi_tunggu', $data);
+
+					}else {
+						$this->session->set_flashdata('error', 'Terjadi kesalahan saat mengirimkan pesan ke email anda !!');
+						redirect(site_url('aktivasi-akun'));
+					}
+				}else {
+					redirect('home');
+				}
+			}
+
+		}else {
+			if (!empty($_SERVER['QUERY_STRING'])) {
+				$uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
+			} else {
+				$uri = uri_string();
+			}
+			$this->session->unset_userdata('redirect');
+			$this->session->set_userdata('redirect', $uri);
+			$this->session->set_flashdata('error', "Harap login ke akun anda, untuk melanjutkan");
+			redirect('login');
+		}
+	}
+
+	function aktivasi_akun(){
+
+		if ($this->session->userdata('logged_in') == TRUE || $this->session->userdata('logged_in')) {
+
+			$kode_aktivasi 	= htmlspecialchars($this->input->post('kode_aktivasi'), TRUE);
+			$aktivasi 		= $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE), TRUE);
+
+				if ($this->M_login->aktivasi_kode(str_replace('-', '', $kode_aktivasi), $this->session->userdata('id_user')) == TRUE) {
+					if ($this->M_login->aktivasi_akun($this->session->userdata('id_user')) == TRUE) {
+
+						$this->session->set_flashdata('success', 'Berhasil aktivasi akun !!');
+                        redirect('home');
+					}else {
+						$this->session->set_flashdata('error', 'Terjadi kesalahan saat mencoba meng-aktivasi akun anda !!');
+						redirect($this->agent->referrer());
+					}
+				}else {
+					$this->session->set_flashdata('error', 'Kode yang anda masukkan salah, cek kembali email anda !!');
+					redirect($this->agent->referrer());
+				}
+
+		}else {
+			if (!empty($_SERVER['QUERY_STRING'])) {
+				$uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
+			} else {
+				$uri = uri_string();
+			}
+			$this->session->unset_userdata('redirect');
+			$this->session->set_userdata('redirect', $uri);
+			$this->session->set_flashdata('error', "Harap login ke akun anda, untuk melanjutkan");
+			redirect('login');
+		}
+
+	}
+
+	// LOGOUT
+	public function logout(){
+
+		// SESS DESTROY
+		$user_data = $this->session->all_userdata();
+
+		foreach ($user_data as $key => $value) {
+			if ($key != 'session_id' && $key != 'ip_address' && $key != 'user_agent' && $key != 'last_activity') {
+				$this->session->unset_userdata($key);
+			}
+		}
+
+		$this->session->sess_destroy();
+
+		if ($this->input->get("act")) {
+			if (!empty($_SERVER['QUERY_STRING'])) {
+				$uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
+			} else {
+				$uri = uri_string();
+			}
+			$this->session->unset_userdata('redirect');
+			$this->session->set_userdata('redirect', $uri);
+			$this->session->set_flashdata('error', "Harap login ke akun anda, untuk melanjutkan");
+			redirect('login');
+		}else {
+			$this->session->set_flashdata('success','Berhasil keluar!');
+			redirect(base_url());
+		}
+	}
     
 	// MAILER SENDER
     
