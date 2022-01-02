@@ -94,7 +94,7 @@ class M_login extends CI_Model {
 	}
   
 	public function get_userIP($id_user, $ip){
-		$query 		= $this->db->query("SELECT * FROM tb_login_ip WHERE id_user = '$id_user' AND last_ip = '$ip' AND status = 1");
+		$query 		= $this->db->query("SELECT * FROM tb_login_ip WHERE id_user = '$id_user' AND last_ip = '$ip'");
 		if ($query->num_rows() > 0) {
       return TRUE;
     } else {

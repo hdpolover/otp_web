@@ -39,8 +39,8 @@ class Mailer{
       $mail->Username       = "sms.otp.web@gmail.com";
       $mail->Password       = "otp_web123";
       
-      $mail->setFrom("cs.otp_web@gmail.com", "OTP WEB - Support");
-      $mail->addReplyTo("cs.otp_web@gmail.com", "OTP WEB - Support");
+      $mail->setFrom("support@webotpku.xyz", "support@webotpku.xyz");
+      $mail->addReplyTo("support@webotpku.xyz", "support@webotpku.xyz");
       
       // Add a recipient
       $mail->addAddress($data['to']);
