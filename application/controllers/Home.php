@@ -24,6 +24,11 @@ class Home extends CI_Controller
         }
 
         $this->load->model('M_home');
+
+        if ($this->M_home->cek_aktivasi($this->session->userdata('id_user')) == true) {
+            $this->session->set_flashdata('warning', "Harap melakukan aktivasi akun terlebih dahulu!");
+            redirect(site_url('aktivasi-akun'));
+        }
     }
 
     public function index()
