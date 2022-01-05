@@ -5,7 +5,7 @@
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Skydash Admin</title>
+	<title>Webotpku</title>
 	<!-- plugins:css -->
 	<link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/feather/feather.css">
 	<link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
@@ -86,7 +86,7 @@ function mask_mobile_no($number)
 					<div class="col-lg-6 mx-auto">
 						<div class="auth-form-light text-left py-5 px-4 px-sm-5">
 							<div class="brand-logo">
-								<img src="<?= base_url('assets/'); ?>images/logo.svg" alt="logo">
+                                <img src="<?= base_url('assets/'); ?>images/logo.svg" class="w-100" alt="logo">
 							</div>
 							<center>
 								<h4>Verifikasi OTP</h4>
