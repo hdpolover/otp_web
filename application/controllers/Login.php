@@ -59,23 +59,23 @@ class Login extends CI_Controller
     public function proses_login()
     {
         // ambil inputan dari view
-        $email      = $this->input->post('email');
-        $password   = $this->input->post('password');
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
 
         // cek apakah data user ada, berdasarkan email yang dimasukkan
         if ($this->M_login->cek_user($email) == true) {
             // ambil data user, menjadi array
-            $user     = $this->M_login->get_user($email);
+            $user = $this->M_login->get_user($email);
 
             // cek apakah password yang dimasukkan sama dengan database
             if (password_verify($password, $user->password)) {
 
                 // simpan data user yang login kedalam session 
                 $session_data = array(
-                    'id_user'   => $user->id_user,
-                    'nama'      => $user->nama,
-                    'email'     => $user->email,
-                    'no_telp'   => $user->no_telp,
+                    'id_user' => $user->id_user,
+                    'nama' => $user->nama,
+                    'email' => $user->email,
+                    'no_telp' => $user->no_telp,
                     'logged_in' => true,
                 );
 
@@ -86,35 +86,14 @@ class Login extends CI_Controller
                     $this->session->set_flashdata('warning', "Harap melakukan aktivasi akun terlebih dahulu!");
                     redirect(site_url('aktivasi-akun'));
                 } else {
-                    // arahkan ke halaman admin
-
-
-
-                    // cek IP
-
-                    // get user data IP by ID
-                    $userIP = $this->M_login->get_userIP($this->session->userdata('id_user'), $this->input->ip_address());
-
-                    if ($userIP == TRUE) {
-
-                        // cek apakah IP tidak di blokir
-                        if ($this->M_login->get_userIPBLOKIR($this->session->userdata('id_user'), $this->input->ip_address()) == true) {
-                            // iya blokir
-                            $this->session->set_flashdata('warning', "Anda login menggunakan IP yang telah diblock !");
-                            redirect(site_url('ip-blocked'));
-                        } else {
-                            // bypass OTP
-                            if ($this->session->userdata('redirect')) {
-                                $this->session->set_flashdata('success', 'Anda telah masuk. Silahkan melanjutkan aktivitas anda!');
-                                redirect($this->session->userdata('redirect'));
-                            } else {
-                                $this->session->set_flashdata('success', "Selamat datang!");
-                                redirect(site_url('home'));
-                            }
-                        }
+                    if ($this->session->userdata('redirect')) {
+                        $this->session->set_flashdata('success', 'Anda telah masuk. Silahkan melanjutkan aktivitas anda!');
+                        redirect($this->session->userdata('redirect'));
                     } else {
+                        // $this->session->set_flashdata('success', "Selamat datang!");
+                        // redirect(site_url('home'));
                         // OTP REQUIRE
-                        $this->session->set_flashdata('warning', "Anda login dari IP baru. Harap melakukan proses OTP!");
+                        $this->session->set_flashdata('warning', "Harap melakukan proses OTP !");
                         redirect(site_url('otp'));
                     }
                 }
@@ -131,7 +110,7 @@ class Login extends CI_Controller
     // OTP PROCCESS
     function otp_send()
     {
-        if ($this->session->userdata('logged_in') == FALSE || !$this->session->userdata('logged_in')) {
+        if ($this->session->userdata('logged_in') == false || !$this->session->userdata('logged_in')) {
             if (!empty($_SERVER['QUERY_STRING'])) {
                 $uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
             } else {
@@ -147,7 +126,7 @@ class Login extends CI_Controller
 
     function verifikasi_otp()
     {
-        if ($this->session->userdata('logged_in') == FALSE || !$this->session->userdata('logged_in')) {
+        if ($this->session->userdata('logged_in') == false || !$this->session->userdata('logged_in')) {
             if (!empty($_SERVER['QUERY_STRING'])) {
                 $uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
             } else {
@@ -165,14 +144,11 @@ class Login extends CI_Controller
     function proses_verifikasiOtp()
     {
 
-        if ($this->session->userdata('logged_in') == TRUE || $this->session->userdata('logged_in')) {
+        if ($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in')) {
 
-            $kode_otp         = htmlspecialchars($this->input->post('kode_otp'), TRUE);
+            $kode_otp = htmlspecialchars($this->input->post('kode_otp'), true);
 
-            if ($this->M_login->cekOtp_kode(str_replace('-', '', $kode_otp), $this->session->userdata('id_user')) == TRUE) {
-
-                // simpan IP
-                $this->M_login->save_loginIP();
+            if ($this->M_login->cekOtp_kode(str_replace('-', '', $kode_otp), $this->session->userdata('id_user')) == true) {
 
                 $this->session->set_flashdata('success', "Berhasil verifikasi akun. Selamat datang!");
                 redirect(site_url('home'));
@@ -195,29 +171,29 @@ class Login extends CI_Controller
 
     function send_otp_sms()
     {
-        if ($this->session->userdata('logged_in') == TRUE || $this->session->userdata('logged_in')) {
+        if ($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in')) {
 
-            $email         = htmlspecialchars($this->session->userdata('email'), TRUE);
+            $email = htmlspecialchars($this->session->userdata('email'), true);
 
-            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE)) == FALSE) {
+            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true)) == false) {
 
                 $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengambil data.');
                 redirect(site_url('login'));
             } else {
 
                 // create & save OTP (must call every proccess)
-                if ($this->M_login->create_otp($this->session->userdata('id_user')) == TRUE) {
+                if ($this->M_login->create_otp($this->session->userdata('id_user')) == true) {
 
-                    $user   = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE));
+                    $user = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true));
 
                     if ($user->status != 0) {
 
-                        $to     = $user->no_telp;
-                        $otp    = $this->encryption->decrypt($user->otp);
+                        $to = $user->no_telp;
+                        $otp = $this->encryption->decrypt($user->otp);
                         // $msg     = "#KODE OTP webotpku.xyz#  Jangan bagikan kode ini kepada siapapun. KODE OTP: {$otp}. Hiraukan jika tidak membutuhkan.";
-                        $msg     = "KODE OTP ANDA: {$otp}";
+                        $msg = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: {$otp}. Jangan bagikan ke siapapun.";
 
-                        $url    = "https://websms.co.id/api/smsgateway?token={$this->token}&to={$to}&msg={$msg}";
+                        $url = "https://websms.co.id/api/smsgateway-otp?token={$this->token}&to={$to}&msg={$msg}";
                         // echo $url;
                         $header = array(
                             'Accept: application/json',
@@ -266,26 +242,26 @@ class Login extends CI_Controller
 
     function send_otp_email()
     {
-        if ($this->session->userdata('logged_in') == TRUE || $this->session->userdata('logged_in')) {
+        if ($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in')) {
 
-            $email         = htmlspecialchars($this->session->userdata('email'), TRUE);
+            $email = htmlspecialchars($this->session->userdata('email'), true);
 
-            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE)) == FALSE) {
+            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true)) == false) {
 
                 $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengambil data anda !!');
                 redirect(site_url('login'));
             } else {
 
                 // create & save OTP (must call every proccess)
-                if ($this->M_login->create_otp($this->session->userdata('id_user')) == TRUE) {
+                if ($this->M_login->create_otp($this->session->userdata('id_user')) == true) {
 
-                    $aktivasi   = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE));
+                    $aktivasi = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true));
 
                     if ($aktivasi->status != 0) {
-                        $subject    = "KODE OTP";
-                        $message     = "Kode OTP anda <b>{$this->encryption->decrypt($aktivasi->otp)}</b></br>";
+                        $subject = "KODE OTP";
+                        $message = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: <b>{$this->encryption->decrypt($aktivasi->otp)}</b>. Jangan bagikan ke siapapun.</br>";
 
-                        if ($this->send_email($email, $subject, $message) == TRUE) {
+                        if ($this->send_email($email, $subject, $message) == true) {
                             $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke email Anda. Harap cek kotak masuk atau folder spam Anda!');
                             redirect(site_url('verifikasi-otp'));
                         } else {
@@ -324,10 +300,10 @@ class Login extends CI_Controller
     {
 
         if ($this->M_login->cek_user($email) == true) {
-            $user             = $this->M_login->get_user($email);
+            $user = $this->M_login->get_user($email);
 
-            $data['id_user']  = $user->id_user;
-            $data['email']    = $email;
+            $data['id_user'] = $user->id_user;
+            $data['email'] = $email;
 
             $this->load->view('authentication/ubah_password', $data);
         } else {
@@ -338,14 +314,14 @@ class Login extends CI_Controller
 
     public function proses_lupa()
     {
-        $email      = $this->input->post('email');
+        $email = $this->input->post('email');
 
         if ($this->M_login->cek_user($email) == true) {
 
-            $user     = $this->M_login->get_user($email);
+            $user = $this->M_login->get_user($email);
 
-            $subject  = "Pemulihan password - {$user->email}";
-            $message  = "Hai, {$user->nama} kami mendapatkan permintaan pemulihan password atas nama email {$user->email} harap klik link berikut ini untuk memulihkan password anda, atau abaikan email ini jika anda tidak merasa melakukan proses pemulihan akun.</br>" . base_url() . "recovery-password/" . $email . "</br></br></br></br>";
+            $subject = "Pemulihan password - {$user->email}";
+            $message = "Hai, {$user->nama} kami mendapatkan permintaan pemulihan password atas nama email {$user->email} harap klik link berikut ini untuk memulihkan password anda, atau abaikan email ini jika anda tidak merasa melakukan proses pemulihan akun.</br>" . base_url() . "recovery-password/" . $email . "</br></br></br></br>";
 
             if ($this->send_email($email, $subject, $message)) {
                 $this->session->set_flashdata('success', "Berhasil mengirim link pemulihan password anda, harap cek email anda !");
@@ -362,23 +338,23 @@ class Login extends CI_Controller
 
     public function proses_ubahPassword()
     {
-        $id_user        = $this->input->post('id_user');
-        $password       = $this->input->post('password');
-        $password_conf  = $this->input->post('password_conf');
+        $id_user = $this->input->post('id_user');
+        $password = $this->input->post('password');
+        $password_conf = $this->input->post('password_conf');
 
         if ($password == $password_conf) {
-            $data_user  = array(
-                'password'  => password_hash($password, PASSWORD_DEFAULT)
+            $data_user = array(
+                'password' => password_hash($password, PASSWORD_DEFAULT)
             );
-            $where      = array('id_user' => $id_user);
-            $user       = $this->M_login->get_userByID($id_user);
+            $where = array('id_user' => $id_user);
+            $user = $this->M_login->get_userByID($id_user);
 
             if ($this->M_login->update_password($data_user, $where)) {
 
-                $now      = date("d F Y - H:i");
+                $now = date("d F Y - H:i");
 
-                $subject  = "Perubahan password - {$user->email}";
-                $message  = "Hai, {$user->nama} password kamu telah dirubah, pada {$now}. Harap hubungi admin jika ini bukan anda atau abaikan email ini.</br></br></br></br>";
+                $subject = "Perubahan password - {$user->email}";
+                $message = "Hai, {$user->nama} password kamu telah dirubah, pada {$now}. Harap hubungi admin jika ini bukan anda atau abaikan email ini.</br></br></br></br>";
 
                 $this->send_email($user->email, $subject, $message);
 
@@ -397,23 +373,23 @@ class Login extends CI_Controller
     // ACTIVATION ACCOUNT PROCCESS
     public function aktivasi_email()
     {
-        if ($this->session->userdata('logged_in') == TRUE) {
-            $email         = htmlspecialchars($this->session->userdata('email'), TRUE);
+        if ($this->session->userdata('logged_in') == true) {
+            $email = htmlspecialchars($this->session->userdata('email'), true);
 
-            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE)) == FALSE) {
+            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true)) == false) {
                 $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengambil data anda !!');
                 redirect(site_url('login'));
             } else {
-                $aktivasi = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE));
+                $aktivasi = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true));
 
                 if ($aktivasi->status == 0) {
-                    $subject    = "KODE AKTIVASI AKUN";
-                    $message     = "Kode aktivasi anda: <br><br><center><b style'font-size: 20px;'>{$this->encryption->decrypt($aktivasi->aktivasi)}</b></center><br><br>";
+                    $subject = "KODE AKTIVASI AKUN";
+                    $message = "Kode aktivasi anda: <br><br><center><b style'font-size: 20px;'>{$this->encryption->decrypt($aktivasi->aktivasi)}</b></center><br><br>";
 
-                    if ($this->send_email($email, $subject, $message) == TRUE) {
+                    if ($this->send_email($email, $subject, $message) == true) {
 
-                        $data['mail']            = $email;
-                        $data['kode_aktivasi']    = $this->encryption->decrypt($aktivasi->aktivasi);
+                        $data['mail'] = $email;
+                        $data['kode_aktivasi'] = $this->encryption->decrypt($aktivasi->aktivasi);
                         $this->load->view('authentication/aktivasi', $data);
                     } else {
                         $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengirimkan pesan ke email anda !!');
@@ -439,24 +415,24 @@ class Login extends CI_Controller
 
     public function waiting()
     {
-        if ($this->session->userdata('logged_in') == TRUE || $this->session->userdata('logged_in')) {
+        if ($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in')) {
 
-            $email         = htmlspecialchars($this->session->userdata('email'), TRUE);
+            $email = htmlspecialchars($this->session->userdata('email'), true);
 
-            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE)) == FALSE) {
+            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true)) == false) {
 
                 $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengambil data anda !!');
                 redirect(site_url('login'));
             } else {
-                $aktivasi = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE));
+                $aktivasi = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true));
 
                 if ($aktivasi->status == 0) {
-                    $subject    = "KODE AKTIVASI AKUN";
-                    $message     = "Kode aktivasi anda <b>{$this->encryption->decrypt($aktivasi->aktivasi)}</b></br>";
+                    $subject = "KODE AKTIVASI AKUN";
+                    $message = "Kode aktivasi anda <b>{$this->encryption->decrypt($aktivasi->aktivasi)}</b></br>";
 
-                    if ($this->send_email($email, $subject, $message) == TRUE) {
+                    if ($this->send_email($email, $subject, $message) == true) {
 
-                        $data['mail']        = $email;
+                        $data['mail'] = $email;
                         $this->load->view('authentication/aktivasi_tunggu', $data);
                     } else {
                         $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengirimkan pesan ke email anda !!');
@@ -482,13 +458,13 @@ class Login extends CI_Controller
     function aktivasi_akun()
     {
 
-        if ($this->session->userdata('logged_in') == TRUE || $this->session->userdata('logged_in')) {
+        if ($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in')) {
 
-            $kode_aktivasi     = htmlspecialchars($this->input->post('kode_aktivasi'), TRUE);
-            $aktivasi         = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), TRUE), TRUE);
+            $kode_aktivasi = htmlspecialchars($this->input->post('kode_aktivasi'), true);
+            $aktivasi = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true), true);
 
-            if ($this->M_login->aktivasi_kode(str_replace('-', '', $kode_aktivasi), $this->session->userdata('id_user')) == TRUE) {
-                if ($this->M_login->aktivasi_akun($this->session->userdata('id_user')) == TRUE) {
+            if ($this->M_login->aktivasi_kode(str_replace('-', '', $kode_aktivasi), $this->session->userdata('id_user')) == true) {
+                if ($this->M_login->aktivasi_akun($this->session->userdata('id_user')) == true) {
 
                     // $this->session->set_flashdata('success', 'Berhasil aktivasi akun !!');
                     // redirect('home');
@@ -554,12 +530,12 @@ class Login extends CI_Controller
     {
 
         $mail = array(
-            'to'             => $email,
-            'subject'        => $subject,
-            'message'        => $message
+            'to' => $email,
+            'subject' => $subject,
+            'message' => $message
         );
 
-        if ($this->mailer->send($mail) == TRUE) {
+        if ($this->mailer->send($mail) == true) {
             return true;
         } else {
             return false;

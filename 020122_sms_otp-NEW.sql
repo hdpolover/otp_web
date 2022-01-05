@@ -16,24 +16,6 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`sms_otp` /*!40100 DEFAULT CHARACTER SET
 
 USE `sms_otp`;
 
-/*Table structure for table `tb_login_ip` */
-
-DROP TABLE IF EXISTS `tb_login_ip`;
-
-CREATE TABLE `tb_login_ip` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `id_user` int(19) NOT NULL,
-  `last_ip` varchar(30) NOT NULL,
-  `device` text NOT NULL,
-  `status` int(5) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
-
-/*Data for the table `tb_login_ip` */
-
-insert  into `tb_login_ip`(`id`,`id_user`,`last_ip`,`device`,`status`) values 
-(3,9,'::1','Windows 10 - Chrome 96.0.4664.110',1);
-
 /*Table structure for table `tb_user` */
 
 DROP TABLE IF EXISTS `tb_user`;

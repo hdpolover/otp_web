@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
     <link rel="stylesheet" type="text/css" href="<?= base_url('assets/'); ?>js/select.dataTables.min.css">
 
-    <link rel="stylesheet" href="<?= base_url();?>assets/plugin/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/plugin/sweetalert2/sweetalert2.min.css">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>css/vertical-layout-light/style.css">
@@ -26,7 +26,7 @@
 
     <!-- plugins:js -->
     <script src="<?= base_url('assets/'); ?>vendors/js/vendor.bundle.base.js"></script>
-    <script type="text/javascript" src="<?= base_url();?>assets/plugin/sweetalert2/sweetalert2.min.js"></script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/plugin/sweetalert2/sweetalert2.min.js"></script>
 </head>
 
 <body>
@@ -34,32 +34,35 @@
     <?php if ($this->session->flashdata('error')) { ?>
     <script>
     Swal.fire({
-        text: '<?php echo $this->session->flashdata('error');?>',
+        text: '<?php echo $this->session->flashdata('error'); ?>',
         icon: 'info',
     })
 
     </script>
-    <?php }?>
+    <?php 
+} ?>
 
     <?php if ($this->session->flashdata('warning')) { ?>
     <script>
     Swal.fire({
-        text: '<?php echo $this->session->flashdata('warning');?>',
+        text: '<?php echo $this->session->flashdata('warning'); ?>',
         icon: 'warning',
     })
 
     </script>
-    <?php }?>
+    <?php 
+} ?>
 
     <?php if ($this->session->flashdata('success')) { ?>
     <script>
     Swal.fire({
-        text: '<?php echo $this->session->flashdata('success');?>',
+        text: '<?php echo $this->session->flashdata('success'); ?>',
         icon: 'success',
     })
 
     </script>
-    <?php }?>
+    <?php 
+} ?>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -77,11 +80,7 @@
                             <img src="<?= base_url('assets/'); ?>images/default.png" alt="profile" />
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                            <a href="<?= site_url('pengaturan');?>" class="dropdown-item">
-                                <i class="ti-settings text-primary"></i>
-                                Settings
-                            </a>
-                            <a href="<?= site_url('logout');?>" class="dropdown-item">
+                            <a href="<?= site_url('logout'); ?>" class="dropdown-item">
                                 <i class="ti-power-off text-primary"></i>
                                 Logout
                             </a>

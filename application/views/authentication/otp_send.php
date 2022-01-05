@@ -34,7 +34,8 @@
 				icon: 'info',
 			})
 		</script>
-	<?php } ?>
+	<?php 
+} ?>
 
 	<?php if ($this->session->flashdata('warning')) { ?>
 		<script>
@@ -43,7 +44,8 @@
 				icon: 'warning',
 			})
 		</script>
-	<?php } ?>
+	<?php 
+} ?>
 
 	<?php if ($this->session->flashdata('success')) { ?>
 		<script>
@@ -52,35 +54,36 @@
 				icon: 'success',
 			})
 		</script>
-	<?php } ?>
+	<?php 
+} ?>
 
 	<?php
-	function mask_email($email)
-	{
-		$mail_parts = explode("@", $email);
-		$domain_parts = explode('.', $mail_parts[1]);
-		$mail_parts[0] = mask($mail_parts[0], 2, 1); // show first 2 letters and last 1 letter
-		$domain_parts[0] = mask($domain_parts[0], 2, 1); // same here
-		$mail_parts[1] = implode('.', $domain_parts);
-		return implode("@", $mail_parts);
-	}
-	function mask($str, $first, $last)
-	{
-		$len = strlen($str);
-		$toShow = $first + $last;
-		return substr($str, 0, $len <= $toShow ? 0 : $first) . str_repeat("*", $len - ($len <= $toShow ? 0 : $toShow)) . substr($str, $len - $last, $len <= $toShow ? 0 : $last);
-	}
-	function mask_mobile_no($number)
-	{
-		return substr($number, 0, 2) . '******' . substr($number, -2);
-	}
-	?>
+function mask_email($email)
+{
+	$mail_parts = explode("@", $email);
+	$domain_parts = explode('.', $mail_parts[1]);
+	$mail_parts[0] = mask($mail_parts[0], 2, 1); // show first 2 letters and last 1 letter
+	$domain_parts[0] = mask($domain_parts[0], 2, 1); // same here
+	$mail_parts[1] = implode('.', $domain_parts);
+	return implode("@", $mail_parts);
+}
+function mask($str, $first, $last)
+{
+	$len = strlen($str);
+	$toShow = $first + $last;
+	return substr($str, 0, $len <= $toShow ? 0 : $first) . str_repeat("*", $len - ($len <= $toShow ? 0 : $toShow)) . substr($str, $len - $last, $len <= $toShow ? 0 : $last);
+}
+function mask_mobile_no($number)
+{
+	return substr($number, 0, 2) . '******' . substr($number, -2);
+}
+?>
 
 	<div class="container-scroller">
 		<div class="container-fluid page-body-wrapper full-page-wrapper">
 			<div class="content-wrapper d-flex align-items-center auth px-0">
 				<div class="row w-100 mx-0">
-					<div class="col-lg-4 mx-auto">
+					<div class="col-lg-6 mx-auto">
 						<div class="auth-form-light text-left py-5 px-4 px-sm-5">
 							<div class="brand-logo">
 								<img src="<?= base_url('assets/'); ?>images/logo.svg" alt="logo">
