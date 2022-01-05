@@ -8,6 +8,17 @@ class M_home extends CI_Model
     parent::__construct();
   }
 
+  function cek_aktivasi($id_user)
+  {
+    $query = $this->db->get_where('tb_user', array('id_user' => $id_user))->row();
+    if ($query->status == 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
   public function get_userInfo($id_user)
   {
     $this->db->select('*');
