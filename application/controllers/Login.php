@@ -117,7 +117,13 @@ class Login extends CI_Controller
             $this->session->set_flashdata('error', "Harap login ke akun Anda untuk melanjutkan!");
             redirect('login');
         } else {
-            $this->load->view('authentication/otp_send');
+            // OTP Check
+            if ($this->session->userdata('otp') == false || !$this->session->userdata('otp')) {
+                $this->load->view('authentication/otp_send');
+            } else {
+                $this->session->set_flashdata('warning', "Anda telah melakukan proses OTP !");
+                redirect(site_url('home'));
+            }
         }
     }
 
@@ -133,7 +139,13 @@ class Login extends CI_Controller
             $this->session->set_flashdata('error', "Harap login ke akun Anda untuk melanjutkan!");
             redirect('login');
         } else {
-            $this->load->view('authentication/otp_login');
+            // OTP Check
+            if ($this->session->userdata('otp') == false || !$this->session->userdata('otp')) {
+                $this->load->view('authentication/otp_login');
+            } else {
+                $this->session->set_flashdata('warning', "Anda telah melakukan proses OTP !");
+                redirect(site_url('home'));
+            }
         }
     }
 
