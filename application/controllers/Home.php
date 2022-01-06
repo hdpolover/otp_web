@@ -29,6 +29,12 @@ class Home extends CI_Controller
             $this->session->set_flashdata('warning', "Harap melakukan aktivasi akun terlebih dahulu!");
             redirect(site_url('aktivasi-akun'));
         }
+
+        // OTP REQUIRE
+        if ($this->session->userdata('otp') == false || !$this->session->userdata('otp')) {
+            $this->session->set_flashdata('warning', "Harap melakukan proses OTP !");
+            redirect(site_url('otp'));
+        }
     }
 
     public function index()
