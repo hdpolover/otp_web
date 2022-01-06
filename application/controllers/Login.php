@@ -90,11 +90,8 @@ class Login extends CI_Controller
                         $this->session->set_flashdata('success', 'Anda telah masuk. Silahkan melanjutkan aktivitas anda!');
                         redirect($this->session->userdata('redirect'));
                     } else {
-                        // $this->session->set_flashdata('success', "Selamat datang!");
-                        // redirect(site_url('home'));
-                        // OTP REQUIRE
-                        $this->session->set_flashdata('warning', "Harap melakukan proses OTP !");
-                        redirect(site_url('otp'));
+                        $this->session->set_flashdata('success', "Selamat datang!");
+                        redirect(site_url('home'));
                     }
                 }
             } else {
@@ -149,6 +146,13 @@ class Login extends CI_Controller
             $kode_otp = htmlspecialchars($this->input->post('kode_otp'), true);
 
             if ($this->M_login->cekOtp_kode(str_replace('-', '', $kode_otp), $this->session->userdata('id_user')) == true) {
+
+                // simpan data user yang login kedalam session 
+                $session_data = array(
+                    'otp' => true,
+                );
+
+                $this->session->set_userdata($session_data);
 
                 $this->session->set_flashdata('success', "Berhasil verifikasi akun. Selamat datang!");
                 redirect(site_url('home'));
@@ -321,7 +325,7 @@ class Login extends CI_Controller
             $user = $this->M_login->get_user($email);
 
             $subject = "Pemulihan password - {$user->email}";
-            $message = "Hai, {$user->nama} kami mendapatkan permintaan pemulihan password atas nama email {$user->email} harap klik link berikut ini untuk memulihkan password anda, atau abaikan email ini jika anda tidak merasa melakukan proses pemulihan akun.</br>" . base_url() . "recovery-password/" . $email . "</br></br></br></br>";
+            $message = "Hai, {$user->nama}. Kami mendapatkan permintaan pemulihan password atas nama email <b>{$user->email}</b>.<br>Harap klik link berikut ini untuk memulihkan password anda, atau abaikan email ini jika anda tidak merasa melakukan proses pemulihan akun.<br><br><b><i>" . base_url() . "recovery-password/{$email}</i></b>";
 
             if ($this->send_email($email, $subject, $message)) {
                 $this->session->set_flashdata('success', "Berhasil mengirim link pemulihan password anda, harap cek email anda !");
@@ -470,8 +474,8 @@ class Login extends CI_Controller
                     // redirect('home');
 
                     // OTP FIRST
-                    $this->session->set_flashdata('success', "Berhasil aktivasi akun, harap verifikasi OTP terlebih dahulu !");
-                    redirect(site_url('otp'));
+                    $this->session->set_flashdata('success', "Berhasil aktivasi akun!");
+                    redirect(site_url('logout'));
                 } else {
                     $this->session->set_flashdata('error', 'Terjadi kesalahan saat mencoba meng-aktivasi akun anda !!');
                     redirect($this->agent->referrer());

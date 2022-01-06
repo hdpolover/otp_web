@@ -38,9 +38,9 @@ class Mailer
     $mail->SMTPKeepAlive = true;
     $mail->SMTPSecure = "ssl";
     $mail->Port = 465;
-    $mail->Host = "smtp.gmail.com";
-    $mail->Username = "sms.otp.web@gmail.com";
-    $mail->Password = "otp_web123";
+    $mail->Host = "mail.webotpku.xyz";
+    $mail->Username = "support@webotpku.xyz";
+    $mail->Password = "3FNK+RIwjI07";
 
     $mail->setFrom("support@webotpku.xyz", "support@webotpku.xyz");
     $mail->addReplyTo("support@webotpku.xyz", "support@webotpku.xyz");
