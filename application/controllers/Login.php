@@ -25,6 +25,9 @@ class Login extends CI_Controller
             $this->session->set_flashdata('warning', 'Berhasil masuk ke akun.');
             redirect(site_url('home'));
         } else {
+            if ($this->input->get('act') == "account-activated") {
+                $this->session->set_flashdata('success', 'Berhasil aktivasi akun, silahkan login kedalam akun anda.');
+            }
             $this->load->view('authentication/login');
         }
     }
@@ -485,9 +488,19 @@ class Login extends CI_Controller
                     // $this->session->set_flashdata('success', 'Berhasil aktivasi akun !!');
                     // redirect('home');
 
-                    // OTP FIRST
-                    $this->session->set_flashdata('success', "Berhasil aktivasi akun!");
-                    redirect(site_url('logout'));
+                    // SESS DESTROY
+                    $user_data = $this->session->all_userdata();
+
+                    foreach ($user_data as $key => $value) {
+                        if ($key != 'session_id' && $key != 'ip_address' && $key != 'user_agent' && $key != 'last_activity') {
+                            $this->session->unset_userdata($key);
+                        }
+                    }
+
+                    $this->session->sess_destroy();
+
+                    // SUCCESS
+                    redirect(site_url('login?act=account-activated'));
                 } else {
                     $this->session->set_flashdata('error', 'Terjadi kesalahan saat mencoba meng-aktivasi akun anda !!');
                     redirect($this->agent->referrer());
@@ -523,21 +536,8 @@ class Login extends CI_Controller
         }
 
         $this->session->sess_destroy();
-
-        if ($this->input->get("act")) {
-            if (!empty($_SERVER['QUERY_STRING'])) {
-                $uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
-            } else {
-                $uri = uri_string();
-            }
-            $this->session->unset_userdata('redirect');
-            $this->session->set_userdata('redirect', $uri);
-            $this->session->set_flashdata('error', "Harap login ke akun anda, untuk melanjutkan");
-            redirect('login');
-        } else {
-            $this->session->set_flashdata('success', 'Berhasil keluar!');
-            redirect(base_url());
-        }
+        $this->session->set_flashdata('success', 'Berhasil keluar!');
+        redirect(base_url());
     }
 
     // MAILER SENDER
