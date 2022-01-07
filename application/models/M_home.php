@@ -35,9 +35,20 @@ class M_home extends CI_Model
 
   }
 
-  function no_telp($no_telp)
+  function cekNo_telp($no_telp, $id_user)
   {
-    $query = $this->db->get_where('tb_user', array('no_telp' => $no_telp));
+    $query = $this->db->get_where('tb_user', array('no_telp' => $no_telp, 'id_user !=' => $id_user));
+    if ($query->num_rows() > 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  function cekEmail($email, $id_user)
+  {
+    $query = $this->db->get_where('tb_user', array('no_telp' => $no_telp, 'id_user !=' => $id_user));
     if ($query->num_rows() > 0) {
       return true;
     } else {

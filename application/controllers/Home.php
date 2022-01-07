@@ -52,8 +52,8 @@ class Home extends CI_Controller
         $email = $this->input->post('email');
         $no_telp = $this->input->post('no_telp');
 
-        if ($this->M_login->cek_user($email) == false) {
-            if ($this->M_home->no_telp($no_telp) == false) {
+        if ($this->M_home->cekEmail($email, $this->session->userdata('id_user')) == false) {
+            if ($this->M_home->cekNo_telp($no_telp, $this->session->userdata('id_user')) == false) {
                 if ($this->M_home->simpan_info() == true) {
                     $this->session->set_flashdata('success', 'Berhasil mengubah informasi pribadi anda !');
                     redirect($this->agent->referrer());
