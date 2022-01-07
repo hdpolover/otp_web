@@ -23,7 +23,7 @@ class Home extends CI_Controller
             redirect('login');
         }
 
-        $this->load->model('M_home');
+        $this->load->model(['M_home', 'M_login']);
 
         if ($this->M_home->cek_aktivasi($this->session->userdata('id_user')) == true) {
             $this->session->set_flashdata('warning', "Harap melakukan aktivasi akun terlebih dahulu!");
@@ -49,11 +49,24 @@ class Home extends CI_Controller
 
     function simpan_info()
     {
-        if ($this->M_home->simpan_info() == true) {
-            $this->session->set_flashdata('success', 'Berhasil mengubah informasi pribadi anda !');
-            redirect($this->agent->referrer());
+        $email = $this->input->post('email');
+        $no_telp = $this->input->post('no_telp');
+
+        if ($this->M_login->cek_user($email) == false) {
+            if ($this->M_home->no_telp($no_telp) == false) {
+                if ($this->M_home->simpan_info() == true) {
+                    $this->session->set_flashdata('success', 'Berhasil mengubah informasi pribadi anda !');
+                    redirect($this->agent->referrer());
+                } else {
+                    $this->session->set_flashdata('error', 'Anda tidak melakukan perubahan informasi pribadi anda !');
+                    redirect($this->agent->referrer());
+                }
+            } else {
+                $this->session->set_flashdata('warning', "Nomor telepon telah digunakan !");
+                redirect($this->agent->referrer());
+            }
         } else {
-            $this->session->set_flashdata('error', 'Anda tidak melakukan perubahan informasi pribadi anda !');
+            $this->session->set_flashdata('warning', "Email telah digunakan !");
             redirect($this->agent->referrer());
         }
     }

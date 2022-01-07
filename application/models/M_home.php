@@ -35,12 +35,24 @@ class M_home extends CI_Model
 
   }
 
+  function no_telp($no_telp)
+  {
+    $query = $this->db->get_where('tb_user', array('no_telp' => $no_telp));
+    if ($query->num_rows() > 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
   function simpan_info()
   {
     $id_user = $this->session->userdata('id_user');
     $nama = $this->input->post('nama');
     $no_telp = $this->input->post('no_telp');
     $email = $this->input->post('email');
+    $password = $this->input->post('password');
 
     // simpan data user yang login kedalam session 
     $session_data = array(
@@ -51,11 +63,21 @@ class M_home extends CI_Model
 
     $this->session->set_userdata($session_data);
 
-    $data = array(
-      'nama' => $nama,
-      'no_telp' => $no_telp,
-      'email' => $email
-    );
+    if ($this->input->post('password')) {
+
+      $data = array(
+        'nama' => $nama,
+        'no_telp' => $no_telp,
+        'email' => $email,
+        'password' => password_hash($password, PASSWORD_DEFAULT),
+      );
+    } else {
+      $data = array(
+        'nama' => $nama,
+        'no_telp' => $no_telp,
+        'email' => $email
+      );
+    }
 
     $this->db->where('id_user', $id_user);
     $this->db->update('tb_user', $data);

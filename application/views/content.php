@@ -45,6 +45,11 @@
 										<input type="email" class="form-control" name="email" id="inputEmail" value="<?= $user->email; ?>"
 											required>
 									</div>
+									<div class="form-group">
+										<label for="inputPassword" class="input-label">Password <small class="text-danger">*</small></label>
+										<input type="password" class="form-control" name="password" id="inputPassword" placeholder="Masukkan password baru"
+											required>
+									</div>
 									<hr>
 									<button type="submit" class="btn btn-primary float-right" id="send-button">simpan</button>
 								</form>
