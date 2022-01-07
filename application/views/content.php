@@ -47,8 +47,7 @@
 									</div>
 									<div class="form-group">
 										<label for="inputPassword" class="input-label">Password <small class="text-danger">*</small></label>
-										<input type="password" class="form-control" name="password" id="inputPassword" placeholder="Masukkan password baru"
-											required>
+										<input type="password" class="form-control" name="password" id="inputPassword" placeholder="Masukkan password baru">
 									</div>
 									<hr>
 									<button type="submit" class="btn btn-primary float-right" id="send-button">simpan</button>
