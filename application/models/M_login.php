@@ -99,7 +99,7 @@ class M_login extends CI_Model
   function create_otp($id_user)
   {
     $this->db->where('id_user', $id_user);
-    $this->db->update('tb_user', array('otp' => $this->create_kode()));
+    $this->db->update('tb_user', array('otp' => $this->create_kode(), 'expired_otp' => time()));
     return $this->db->affected_rows() == true;
   }
 
@@ -113,6 +113,16 @@ class M_login extends CI_Model
     } else {
       return false;
     }
+  }
+
+  function get_dataOTP($id_user){
+    $query = $this->db->get_where('tb_user', array('id_user' => $id_user));
+    if ($query->num_rows() > 0) {
+      return $query->row();
+    } else {
+      return false;
+    }
+    
   }
   
 	// AKTIVASI
