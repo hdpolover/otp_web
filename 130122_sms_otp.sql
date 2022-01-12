@@ -28,15 +28,16 @@ CREATE TABLE `tb_user` (
   `password` varchar(200) NOT NULL,
   `status` int(5) NOT NULL DEFAULT 0,
   `otp` varchar(200) NOT NULL,
+  `expired_otp` varchar(30) NOT NULL DEFAULT '0',
   `aktivasi` varchar(200) NOT NULL,
   `tgl_bergabung` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `tb_user` */
 
-insert  into `tb_user`(`id_user`,`nama`,`no_telp`,`email`,`password`,`status`,`otp`,`aktivasi`,`tgl_bergabung`) values 
-(9,'Mahendra Dwi Purwanto','085785111746','mahendradwipurwanto@gmail.com','$2y$10$WA.9CvV348VMacA6uYsyiOxEX6JquIjw/OwT96DZMbYfKsEOaAcm2',1,'add010fc7316a85378f8919c8902f8299624d8155e457aad9ce4d3f3499a3280b69b342e8a04dd5695d0d373866788435c4db27e49e4d3d0bdcb27c8595adf71/xx/lL2R2hqZ5dX+sLuhw5tt0qcoqoEhiOLWiHTtRV4=','8e6cddbe9ad4bfb59c7072cfc67fb7cbcebfbea2a63b2582f2881f56d77514f7faf962c7e413dc04474f9079771a0ee9e473b2aff35949fe66fdbcba2a257b98i44VrTvxZCv44HkyfgAupJFYVIFF8G5D7eQ25zRJBec=','2022-01-02 20:48:31');
+insert  into `tb_user`(`id_user`,`nama`,`no_telp`,`email`,`password`,`status`,`otp`,`expired_otp`,`aktivasi`,`tgl_bergabung`) values 
+(10,'Jhon DOe','085785111746','developpertech@gmail.com','$2y$10$y0tkwlvk/irfhXBODIYgwebgDFeyoFFmISRf23ht4Gca8Ggs3BAY6',1,'315c30725e8d7c92d4353633da5b43af3a2a25e8cd7b8a826a3632a8215e64cbb28a8e727742aa1e8f1087ed6bafce88228e95f0b13be482b3fd854ee9702cf0YKcVlKHU5/PXNTIrrvWPgjT03U0hKOgPW7huvpLtWUI=','0','4f30c5d7d00c73d41ef61c11ffcf549c04a47d13a041b2e88aeab19d2d646e0570e3c43d7b9ff802973ceec800d07317eda6651405e8ccf3e60b681c2f09dffaho9p6tAv6wDalKyV+LV712fPtm6AOt7SSw27uHQdJxM=','2022-01-13 06:35:31');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

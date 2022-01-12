@@ -159,6 +159,9 @@ class Login extends CI_Controller
         if ($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in')) {
 
             $kode_otp = htmlspecialchars($this->input->post('kode_otp'), true);
+            $data_otp = $this->M_login->get_dataOTP($this->session->userdata('id_user'));
+            // cek apakah waktu token valid kurang dari 24 jam
+            if (time() - $data_otp->expired_otp < (60 * 60)) {
 
             if ($this->M_login->cekOtp_kode(str_replace('-', '', $kode_otp), $this->session->userdata('id_user')) == true) {
 
@@ -169,11 +172,17 @@ class Login extends CI_Controller
 
                 $this->session->set_userdata($session_data);
 
-                $this->session->set_flashdata('success', "Berhasil verifikasi akun. Selamat datang!");
+                $this->session->set_flashdata('success', "Berhasil verifikasi OTP. Selamat datang!");
                 redirect(site_url('home'));
             } else {
                 $this->session->set_flashdata('error', 'Kode yang anda masukkan salah. Cek kembali email anda!');
                 redirect($this->agent->referrer());
+            }
+
+            } else {
+
+                $this->session->set_flashdata('error', 'Anda telah melewati batas waktu OTP, harap mengulang proses OTP. ');
+                redirect(site_url('otp'));
             }
         } else {
             if (!empty($_SERVER['QUERY_STRING'])) {
@@ -210,7 +219,7 @@ class Login extends CI_Controller
                         $to = $user->no_telp;
                         $otp = $this->encryption->decrypt($user->otp);
                         // $msg     = "#KODE OTP webotpku.xyz#  Jangan bagikan kode ini kepada siapapun. KODE OTP: {$otp}. Hiraukan jika tidak membutuhkan.";
-                        $msg = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: {$otp}. Jangan bagikan ke siapapun.";
+                        $msg = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: {$otp}. Jangan bagikan ke siapapun. Kode ini hanya aktif selama 1 jam.";
 
                         $url = "https://websms.co.id/api/smsgateway-otp?token={$this->token}&to={$to}&msg={$msg}";
                         // echo $url;
@@ -278,7 +287,7 @@ class Login extends CI_Controller
 
                     if ($aktivasi->status != 0) {
                         $subject = "KODE OTP";
-                        $message = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: <b>{$this->encryption->decrypt($aktivasi->otp)}</b>. Jangan bagikan ke siapapun.</br>";
+                        $message = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: <b>{$this->encryption->decrypt($aktivasi->otp)}</b>. Jangan bagikan ke siapapun.<br> Kode ini hanya aktif selama 1 jam.";
 
                         if ($this->send_email($email, $subject, $message) == true) {
                             $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke email Anda. Harap cek kotak masuk atau folder spam Anda!');
