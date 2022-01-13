@@ -160,8 +160,8 @@ class Login extends CI_Controller
 
             $kode_otp = htmlspecialchars($this->input->post('kode_otp'), true);
             $data_otp = $this->M_login->get_dataOTP($this->session->userdata('id_user'));
-            // cek apakah waktu token valid kurang dari 24 jam
-            if (time() - $data_otp->expired_otp < (60 * 60)) {
+            // cek apakah waktu token valid kurang dari 1 menit
+            if (time() - $data_otp->expired_otp < (60)) {
 
             if ($this->M_login->cekOtp_kode(str_replace('-', '', $kode_otp), $this->session->userdata('id_user')) == true) {
 
