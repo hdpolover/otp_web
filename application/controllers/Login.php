@@ -1,10 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+ini_set('allow_url_fopen', 1);
+
+use GuzzleHttp\Client;
 
 class Login extends CI_Controller
 {
 
     private $token;
+    private $token_wa;
+    private $url_wa;
 
     // Construct
     public function __construct()
@@ -14,8 +19,49 @@ class Login extends CI_Controller
         // SET TOKEN for SMS SENDER
         $this->token = 'c05c40f4d9795b24863bff930a33d6f6';
 
+        // SET TOKEN for WA SENDER
+        $this->token_wa = '0EZJI9yIlyJmc3x8XyxEulDGlpav4yezMVEGXlB7Me06mt04HGkyG0fabwP2uf0w';
+
+        // SET URL API FOR WA APi
+        $this->url_wa = 'https://sambi.wablas.com';
+
         // LOAD MODEL MASUK
         $this->load->model('M_login');
+    }
+
+    public function test_wa()
+    {
+        $curl = curl_init();
+        $payload = [
+            "data" => [
+                [
+                    'phone' => '6285785111746',
+                    'message' => 'try message 1',
+                    'secret' => false, // or true
+                    'priority' => false, // or true
+                ]
+            ]
+        ];
+
+        curl_setopt(
+            $curl,
+            CURLOPT_HTTPHEADER,
+            array(
+                "Authorization: {$this->token_wa}",
+                "Content-Type: application/json"
+            )
+        );
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($curl, CURLOPT_URL, "{$this->url_wa}/api/v2/send-bulk/text");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        echo "<pre>";
+        print_r($result);
     }
 
     // MAIN
@@ -160,25 +206,24 @@ class Login extends CI_Controller
 
             $kode_otp = htmlspecialchars($this->input->post('kode_otp'), true);
             $data_otp = $this->M_login->get_dataOTP($this->session->userdata('id_user'));
-            // cek apakah waktu token valid kurang dari 24 jam
-            if (time() - $data_otp->expired_otp < (60 * 60)) {
+            // cek apakah waktu token valid kurang dari 1 menit
+            if (time() - $data_otp->expired_otp < (60)) {
 
-            if ($this->M_login->cekOtp_kode(str_replace('-', '', $kode_otp), $this->session->userdata('id_user')) == true) {
+                if ($this->M_login->cekOtp_kode(str_replace('-', '', $kode_otp), $this->session->userdata('id_user')) == true) {
 
-                // simpan data user yang login kedalam session 
-                $session_data = array(
-                    'otp' => true,
-                );
+                    // simpan data user yang login kedalam session 
+                    $session_data = array(
+                        'otp' => true,
+                    );
 
-                $this->session->set_userdata($session_data);
+                    $this->session->set_userdata($session_data);
 
-                $this->session->set_flashdata('success', "Berhasil verifikasi OTP. Selamat datang!");
-                redirect(site_url('home'));
-            } else {
-                $this->session->set_flashdata('error', 'Kode yang anda masukkan salah. Cek kembali email anda!');
-                redirect($this->agent->referrer());
-            }
-
+                    $this->session->set_flashdata('success', "Berhasil verifikasi OTP. Selamat datang!");
+                    redirect(site_url('home'));
+                } else {
+                    $this->session->set_flashdata('error', 'Kode yang anda masukkan salah. Cek kembali email anda!');
+                    redirect($this->agent->referrer());
+                }
             } else {
 
                 $this->session->set_flashdata('error', 'Anda telah melewati batas waktu OTP, harap mengulang proses OTP. ');
@@ -216,36 +261,31 @@ class Login extends CI_Controller
 
                     if ($user->status != 0) {
 
+                        $client = new Client();
+
                         $to = $user->no_telp;
                         $otp = $this->encryption->decrypt($user->otp);
                         // $msg     = "#KODE OTP webotpku.xyz#  Jangan bagikan kode ini kepada siapapun. KODE OTP: {$otp}. Hiraukan jika tidak membutuhkan.";
-                        $msg = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: {$otp}. Jangan bagikan ke siapapun. Kode ini hanya aktif selama 1 jam.";
+                        $msg = "Hai {$this->session->userdata('nama')}, nomor OTP anda adalah: {$otp}. Jangan bagikan ke siapapun. Kode ini hanya aktif selama 1 menit.";
 
                         $url = "https://websms.co.id/api/smsgateway-otp?token={$this->token}&to={$to}&msg={$msg}";
-                        // echo $url;
-                        $header = array(
-                            'Accept: application/json',
-                        );
 
-                        $ch = curl_init();
-                        curl_setopt($ch, CURLOPT_URL, $url);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-                        $result = curl_exec($ch);
+                        $response = $client->request('GET', $url);
 
-                        // echo $result;
+                        $data = $response->getBody();
+                        $read_json = json_decode($data, true);
 
-                        $a = json_decode($result, true);
-
-                        if ($a['status'] == "success") {
+                        if ($read_json['status'] == "success") {
                             $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke nomor Anda. Harap cek kontak masuk Anda!');
                             redirect(site_url('verifikasi-otp'));
                         } else {
-                            $error = $a['message'];
-                            $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengirimkan pesan ke email anda {$error} !');
+                            $error = $read_json['message'];
+                            $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengirimkan pesan ke nomor anda ' . $error . ' !');
                             redirect(site_url('otp'));
                         }
+
+                        // $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke nomor Anda. Harap cek kontak masuk Anda!');
+                        // redirect(site_url('verifikasi-otp'));
                     } else {
                         $this->session->set_flashdata('warning', 'Harap aktivasi akun Anda terlebih dahulu!');
                         redirect(site_url('aktivasi-akun'));
@@ -287,7 +327,7 @@ class Login extends CI_Controller
 
                     if ($aktivasi->status != 0) {
                         $subject = "KODE OTP";
-                        $message = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: <b>{$this->encryption->decrypt($aktivasi->otp)}</b>. Jangan bagikan ke siapapun.<br> Kode ini hanya aktif selama 1 jam.";
+                        $message = "Hai {$this->session->userdata('nama')}, nomor OTPmu adalah: <b>{$this->encryption->decrypt($aktivasi->otp)}</b>. Jangan bagikan ke siapapun.<br> Kode ini hanya aktif selama 1 menit.";
 
                         if ($this->send_email($email, $subject, $message) == true) {
                             $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke email Anda. Harap cek kotak masuk atau folder spam Anda!');
@@ -314,6 +354,97 @@ class Login extends CI_Controller
             $this->session->unset_userdata('redirect');
             $this->session->set_userdata('redirect', $uri);
             $this->session->set_flashdata('error', "Harap login ke akun anda, untuk melanjutkan");
+            redirect('login');
+        }
+    }
+
+    function send_otp_wa()
+    {
+        if ($this->session->userdata('logged_in') == true || $this->session->userdata('logged_in')) {
+
+            $email = htmlspecialchars($this->session->userdata('email'), true);
+
+            if ($this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true)) == false) {
+
+                $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengambil data.');
+                redirect(site_url('login'));
+            } else {
+
+                // create & save OTP (must call every proccess)
+                if ($this->M_login->create_otp($this->session->userdata('id_user')) == true) {
+
+                    $user = $this->M_login->get_aktivasi(htmlspecialchars($this->session->userdata('id_user'), true));
+
+                    if ($user->status != 0) {
+
+                        $to = $user->no_telp;
+                        $otp = $this->encryption->decrypt($user->otp);
+
+                        // $msg     = "#KODE OTP webotpku.xyz#  Jangan bagikan kode ini kepada siapapun. KODE OTP: {$otp}. Hiraukan jika tidak membutuhkan.";
+                        $msg = "Hai {$this->session->userdata('nama')}, nomor OTP anda adalah: {$otp}. Jangan bagikan ke siapapun. Kode ini hanya aktif selama 1 menit.";
+
+                        $endpoint = "api/v2/send-bulk/text";
+
+                        $curl = curl_init();
+                        $payload = [
+                            "data" => [
+                                [
+                                    'phone' => $to,
+                                    'message' => $msg,
+                                    'secret' => false, // or true
+                                    'priority' => false, // or true
+                                ]
+                            ]
+                        ];
+
+                        curl_setopt(
+                            $curl,
+                            CURLOPT_HTTPHEADER,
+                            array(
+                                "Authorization: {$this->token_wa}",
+                                "Content-Type: application/json"
+                            )
+                        );
+                        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+                        curl_setopt($curl, CURLOPT_URL, "{$this->url_wa}/{$endpoint}");
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+                        $result = curl_exec($curl);
+                        curl_close($curl);
+
+                        $result = json_decode($result, true);
+                        
+                        if ($result['status'] == "success") {
+                            $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke nomor Anda. Harap cek kontak masuk Anda!');
+                            redirect(site_url('verifikasi-otp'));
+                        } else {
+                            $error = $result['message'];
+                            $this->session->set_flashdata('error', 'Terjadi kesalahan saat mengirimkan pesan ke nomor anda ' . $error . ' !');
+                            redirect(site_url('otp'));
+                        }
+
+                        // $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke nomor Anda. Harap cek kontak masuk Anda!');
+                        // redirect(site_url('verifikasi-otp'));
+                    } else {
+                        $this->session->set_flashdata('warning', 'Harap aktivasi akun Anda terlebih dahulu!');
+                        redirect(site_url('aktivasi-akun'));
+                    }
+                } else {
+                    $this->session->set_flashdata('error', 'Terjadi kesalahan saat membuat kode OTP anda !');
+                    redirect(site_url('otp'));
+                }
+            }
+        } else {
+            if (!empty($_SERVER['QUERY_STRING'])) {
+                $uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
+            } else {
+                $uri = uri_string();
+            }
+            $this->session->unset_userdata('redirect');
+            $this->session->set_userdata('redirect', $uri);
+            $this->session->set_flashdata('error', "Harap login ke akun Anda untuk melanjutkan!");
             redirect('login');
         }
     }

@@ -33,7 +33,7 @@ class Mailer
       )
     );
       
-      // $mail->SMTPDebug      = 1;
+    //   $mail->SMTPDebug      = 3;
     $mail->SMTPAuth = true;
     $mail->SMTPKeepAlive = true;
     $mail->SMTPSecure = "ssl";
@@ -69,4 +69,3 @@ class Mailer
   }
 
 } ?>
-  

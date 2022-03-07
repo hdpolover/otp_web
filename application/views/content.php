@@ -46,7 +46,7 @@
 											required>
 									</div>
 									<div class="form-group">
-										<label for="inputPassword" class="input-label">Password <small class="text-danger">*</small></label>
+										<label for="inputPassword" class="input-label">Password <small class="text-muted">(optional)</small></label>
 										<input type="password" class="form-control" name="password" id="inputPassword" placeholder="Masukkan password baru">
 									</div>
 									<hr>
