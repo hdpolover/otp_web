@@ -417,7 +417,7 @@ class Login extends CI_Controller
                         $result = json_decode($result, true);
                         
                         if ($result['status'] == "success") {
-                            $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke nomor Anda. Harap cek kontak masuk Anda!');
+                            $this->session->set_flashdata('success', 'Berhasil mengirimkan kode OTP ke whatsapp Anda. Harap tunggu 3 menit s/d 5 menit!');
                             redirect(site_url('verifikasi-otp'));
                         } else {
                             $error = $result['message'];
