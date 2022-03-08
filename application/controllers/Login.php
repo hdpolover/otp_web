@@ -20,7 +20,7 @@ class Login extends CI_Controller
         $this->token = 'c05c40f4d9795b24863bff930a33d6f6';
 
         // SET TOKEN for WA SENDER
-        $this->token_wa = '0EZJI9yIlyJmc3x8XyxEulDGlpav4yezMVEGXlB7Me06mt04HGkyG0fabwP2uf0w';
+        $this->token_wa = 'RcKpZ7HLNFpA3ArSXEXYPjRiLzRoIoM6WqHsmwoDW3Q87vePs4ZDhscz6WR0iyDH';
 
         // SET URL API FOR WA APi
         $this->url_wa = 'https://sambi.wablas.com';
