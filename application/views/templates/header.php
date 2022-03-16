@@ -6,6 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Webotpku</title>
+    <meta property="og:title" content="Web OTPku">
+    <meta property="og:description" content="Website that handles OTP process">
+    <meta property="og:image" content="<?= base_url('assets/'); ?>images/logo.svg">
+    <meta property="og:url" content="<?= base_url(uri_string()) ?>">
     <!-- plugins:css -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/feather/feather.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">

@@ -85,7 +85,7 @@ class M_login extends CI_Model
     $this->encryption->initialize(array('driver' => 'openssl'));
 
     do {
-      $KODE = random_int(100000, 999999);
+      $KODE = sprintf("%06d", mt_rand(1, 999999));
       
 			// ENCRYPT KODE
       $ciphercode = $this->encryption->encrypt($KODE);

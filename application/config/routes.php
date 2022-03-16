@@ -9,6 +9,7 @@ $route['aktivasi-akun'] = 'login/aktivasi_email';
 $route['otp'] = 'login/otp_send';
 $route['send-otp/email'] = 'login/send_otp_email';
 $route['send-otp/sms'] = 'login/send_otp_sms';
+$route['send-otp/wa'] = 'login/send_otp_wa';
 $route['verifikasi-otp'] = 'login/verifikasi_otp';
 
 $route['logout'] = 'login/logout';
