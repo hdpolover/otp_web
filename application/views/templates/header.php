@@ -5,7 +5,11 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Skydash Admin</title>
+    <title>Webotpku</title>
+    <meta property="og:title" content="Web OTPku">
+    <meta property="og:description" content="Website that handles OTP process">
+    <meta property="og:image" content="<?= base_url('assets/'); ?>images/logo.svg">
+    <meta property="og:url" content="<?= base_url(uri_string()) ?>">
     <!-- plugins:css -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/feather/feather.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
@@ -15,20 +19,60 @@
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>vendors/ti-icons/css/themify-icons.css">
     <link rel="stylesheet" type="text/css" href="<?= base_url('assets/'); ?>js/select.dataTables.min.css">
+
+    <link rel="stylesheet" href="<?= base_url(); ?>assets/plugin/sweetalert2/sweetalert2.min.css">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="<?= base_url('assets/'); ?>css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="<?= base_url('assets/'); ?>images/favicon.png" />
+
+
+    <!-- plugins:js -->
+    <script src="<?= base_url('assets/'); ?>vendors/js/vendor.bundle.base.js"></script>
+    <script type="text/javascript" src="<?= base_url(); ?>assets/plugin/sweetalert2/sweetalert2.min.js"></script>
 </head>
 
 <body>
+    <!-- ALERT -->
+    <?php if ($this->session->flashdata('error')) { ?>
+    <script>
+    Swal.fire({
+        text: '<?php echo $this->session->flashdata('error'); ?>',
+        icon: 'info',
+    })
+
+    </script>
+    <?php 
+} ?>
+
+    <?php if ($this->session->flashdata('warning')) { ?>
+    <script>
+    Swal.fire({
+        text: '<?php echo $this->session->flashdata('warning'); ?>',
+        icon: 'warning',
+    })
+
+    </script>
+    <?php 
+} ?>
+
+    <?php if ($this->session->flashdata('success')) { ?>
+    <script>
+    Swal.fire({
+        text: '<?php echo $this->session->flashdata('success'); ?>',
+        icon: 'success',
+    })
+
+    </script>
+    <?php 
+} ?>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="<?= base_url('assets/'); ?>images/logo.svg" class="mr-2" alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="index.html"><img src="<?= base_url('assets/'); ?>images/logo-mini.svg" alt="logo" /></a>
+                <a class="navbar-brand brand-logo mr-5" href=""><img src="<?= base_url('assets/'); ?>images/logo.svg" class="mr-2" alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini" href=""><img src="<?= base_url('assets/'); ?>images/logo.svg" alt="logo" /></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -37,14 +81,10 @@
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                            <img src="<?= base_url('assets/'); ?>images/faces/face28.jpg" alt="profile" />
+                            <img src="<?= base_url('assets/'); ?>images/default.png" alt="profile" />
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                            <a class="dropdown-item">
-                                <i class="ti-settings text-primary"></i>
-                                Settings
-                            </a>
-                            <a class="dropdown-item">
+                            <a href="<?= site_url('logout'); ?>" class="dropdown-item">
                                 <i class="ti-power-off text-primary"></i>
                                 Logout
                             </a>
