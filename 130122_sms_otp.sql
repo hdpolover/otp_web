@@ -21,14 +21,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */
 ;
 
-CREATE DATABASE
-/*!32312 IF NOT EXISTS*/
-`sms_otp`
-/*!40100 DEFAULT CHARACTER SET utf8mb4 */
-;
-
-USE `sms_otp`;
-
 /*Table structure for table `tb_user` */
 DROP TABLE IF EXISTS `tb_user`;
 

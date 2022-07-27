@@ -33,14 +33,14 @@ class Mailer
       )
     );
       
-    //   $mail->SMTPDebug      = 3;
+    // $mail->SMTPDebug      = 3;
     $mail->SMTPAuth = true;
     $mail->SMTPKeepAlive = true;
-    $mail->SMTPSecure = "ssl";
-    $mail->Port = 465;
-    $mail->Host = "mail.webotpku.xyz";
-    $mail->Username = "support@webotpku.xyz";
-    $mail->Password = "3FNK+RIwjI07";
+    $mail->SMTPSecure = "tls";
+    $mail->Port = 587;
+    $mail->Host = "smtp.gmail.com";
+    $mail->Username = "ngodingin.indonesia@gmail.com";
+    $mail->Password = "zxpgwtxyazhyrhoj";
 
     $mail->setFrom("support@webotpku.xyz", "support@webotpku.xyz");
     $mail->addReplyTo("support@webotpku.xyz", "support@webotpku.xyz");
