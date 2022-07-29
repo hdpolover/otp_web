@@ -10,6 +10,7 @@ class Login extends CI_Controller
     private $token;
     private $token_wa;
     private $url_wa;
+    private $endpoint;
 
     // Construct
     public function __construct()
@@ -20,10 +21,13 @@ class Login extends CI_Controller
         $this->token = 'c05c40f4d9795b24863bff930a33d6f6';
 
         // SET TOKEN for WA SENDER
-        $this->token_wa = 'RcKpZ7HLNFpA3ArSXEXYPjRiLzRoIoM6WqHsmwoDW3Q87vePs4ZDhscz6WR0iyDH';
+        $this->token_wa = 'B8q21nnQGUuP7MrjEwg3aZqzadu3hJkaiH9aHSfUH431qhgv9Y5Eh3NM5yt77rzw';
 
         // SET URL API FOR WA APi
-        $this->url_wa = 'https://sambi.wablas.com';
+        $this->url_wa = 'https://kudus.wablas.com';
+
+        // SET ENDPOINT FOR WA APi
+        $this->endpoint = "api/v2/send-message";
 
         // LOAD MODEL MASUK
         $this->load->model('M_login');
@@ -54,7 +58,7 @@ class Login extends CI_Controller
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
-        curl_setopt($curl, CURLOPT_URL, "{$this->url_wa}/api/v2/send-bulk/text");
+        curl_setopt($curl, CURLOPT_URL, "{$this->url_wa}/{$this->endpoint}");
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         $result = curl_exec($curl);
@@ -383,8 +387,6 @@ class Login extends CI_Controller
                         // $msg     = "#KODE OTP webotpku.xyz#  Jangan bagikan kode ini kepada siapapun. KODE OTP: {$otp}. Hiraukan jika tidak membutuhkan.";
                         $msg = "Hai {$this->session->userdata('nama')}, nomor OTP anda adalah: {$otp}. Jangan bagikan ke siapapun. Kode ini hanya aktif selama 1 menit.";
 
-                        $endpoint = "api/v2/send-bulk/text";
-
                         $curl = curl_init();
                         $payload = [
                             "data" => [
@@ -408,7 +410,7 @@ class Login extends CI_Controller
                         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
                         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
-                        curl_setopt($curl, CURLOPT_URL, "{$this->url_wa}/{$endpoint}");
+                        curl_setopt($curl, CURLOPT_URL, "{$this->url_wa}/{$this->endpoint}");
                         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
                         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
                         $result = curl_exec($curl);
